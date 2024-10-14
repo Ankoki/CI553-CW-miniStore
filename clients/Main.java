@@ -28,12 +28,13 @@ import java.awt.*;
  */
 
 class Main {
+
     public static void main(String[] args) {
         new Main().begin();
     }
 
     /**
-     * Starts the system (Non distributed)
+     * Starts the system (Non-distributed)
      */
     public void begin() {
         //DEBUG.set(true); /* Lots of debug info */

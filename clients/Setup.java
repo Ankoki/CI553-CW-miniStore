@@ -14,6 +14,7 @@ import java.util.ArrayList;
  */
 
 class Setup {
+
     private static final String[] sqlStatements = {
 
 //  " SQL code to set up database tables",
@@ -91,9 +92,7 @@ class Setup {
         Statement stmt = null;
         try {
             stmt = theCon.createStatement();
-        } catch (Exception e) {
-            System.err.println("problems creating statement object");
-        }
+        } catch (Exception ex) { System.err.println("problems creating statement object"); }
 
         // execute SQL commands to create table, insert data
         for (String sqlStatement : sqlStatements) {
@@ -137,13 +136,12 @@ class Setup {
 
         try {
             theCon.close();
-        } catch (Exception e) {
+        } catch (Exception ex) {
             System.err.println("problems with close " +
-                    ": " + e.getMessage());
+                    ": " + ex.getMessage());
         }
 
     }
-
 
     private static void query(Statement stmt, String url, String stm) {
         try {
@@ -175,9 +173,9 @@ class Setup {
             }
 
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
             System.err.println("problems with SQL sent to " + url +
-                    "\n" + e.getMessage());
+                    "\n" + ex.getMessage());
         }
     }
 
@@ -185,11 +183,7 @@ class Setup {
         if (s.length() >= len) {
             return s.substring(0, len - 1) + " ";
         } else {
-            StringBuilder res = new StringBuilder(len);
-            res.append(s);
-            for (int i = s.length(); i < len; i++)
-                res.append(' ');
-            return res.toString();
+            return s + " ".repeat(len - s.length());
         }
     }
 
