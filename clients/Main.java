@@ -19,7 +19,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Starts all the clients (user interface)  as a single application.
+ * Starts all the clients (user interface) as a single application.
  * Good for testing the system using a single application.
  *
  * @author Mike Smith University of Brighton
