@@ -5,9 +5,10 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * Write a description of class BetterBasket here.
+ * A collection of products, a parent of {@link Basket}.
+ * Provides utility methods to help keep the products organised.
  *
- * @author Your Name
+ * @author Jay McVeigh
  * @version 1.0
  */
 public class BetterBasket extends Basket implements Serializable {
@@ -31,19 +32,20 @@ public class BetterBasket extends Basket implements Serializable {
             }
             if (!foundDupe)
                 products.add(product);
-            productMap.put(product.getProductNum(), productMap.getOrDefault(product.getProductNum(), 0) + 1);
+            productMap.put(product.getProductNum(), productMap.getOrDefault(product.getProductNum(), 0) + product.getQuantity());
         }
         this.clear();
         for (Product product : products) {
             product.setQuantity(productMap.get(product.getProductNum()));
             this.add(product);
         }
+        System.out.println("MERGED");
     }
 
     /**
      * Sorts the current basket from highest lowest product number.
      */
-    public void sortBasket() {
+    public void sort() {
         this.sort(Comparator.comparing(Product::getProductNum));
     }
 
