@@ -15,6 +15,7 @@ public class BetterBasketTest {
 
     @Before
     public void initiate() {
+        this.basket.clear();
         this.cabbage = new Product("V153", "Washed Cabbage", 1.0, 1);
         this.carrot = new Product("V158", "Juicy Carrot", 1.0, 1);
         this.onion = new Product("V141", "Tart Onion", 2.0, 1);
@@ -24,6 +25,7 @@ public class BetterBasketTest {
 
     @Test
     public void testMerge() {
+        this.initiate();
         Assert.assertEquals(6, basket.size());
         basket.mergeItems();
         Assert.assertEquals(3, basket.size());
@@ -33,7 +35,19 @@ public class BetterBasketTest {
     }
 
     @Test
+    public void autoMerge() {
+        this.initiate();
+        Assert.assertEquals(6, basket.size());
+        basket.addMerge(this.cabbage);
+        Assert.assertEquals(3, basket.size());
+        for (Product product : basket)
+            Assert.assertEquals(product.getProductNum().equals("V153") ? 2 :
+                    product.getProductNum().equals("V158") ? 3 : 4, product.getQuantity());
+    }
+
+    @Test
     public void testSort() {
+        this.initiate();
         Assert.assertEquals(basket.get(0).getProductNum(), cabbage.getProductNum());
         basket.sort();
         Assert.assertEquals(basket.get(0).getProductNum(), onion.getProductNum());

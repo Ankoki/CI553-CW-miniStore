@@ -17,6 +17,20 @@ public class BetterBasket extends Basket implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * Adds a product to the basket.
+     * <br>
+     * Automatically merges duplicate items.
+     *
+     * @param pr A product to be added to the basket
+     * @return true if successfully adds the product
+     */
+    public boolean addMerge(Product pr) {
+        boolean result = super.add(pr);
+        this.mergeItems();
+        return result;
+    }
+
+    /**
      * Merges the items in this basket.
      */
     public void mergeItems() {
@@ -39,7 +53,6 @@ public class BetterBasket extends Basket implements Serializable {
             product.setQuantity(productMap.get(product.getProductNum()));
             this.add(product);
         }
-        System.out.println("MERGED");
     }
 
     /**
