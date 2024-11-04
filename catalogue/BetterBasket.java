@@ -24,35 +24,15 @@ public class BetterBasket extends Basket implements Serializable {
      * @param pr A product to be added to the basket
      * @return true if successfully adds the product
      */
-    public boolean addMerge(Product pr) {
-        boolean result = super.add(pr);
-        this.mergeItems();
-        return result;
-    }
-
-    /**
-     * Merges the items in this basket.
-     */
-    public void mergeItems() {
-        List<Product> products = new ArrayList<>();
-        Map<String, Integer> productMap = new HashMap<>();
+    @Override
+    public boolean add(Product pr) {
         for (Product product : this) {
-            boolean foundDupe = false;
-            for (Product list : products) {
-                if (product.getProductNum().equals(list.getProductNum())) {
-                    foundDupe = true;
-                    break;
-                }
+            if (product.getProductNum().equals(pr.getProductNum())) {
+                product.setQuantity(product.getQuantity() + pr.getQuantity());
+                return true;
             }
-            if (!foundDupe)
-                products.add(product);
-            productMap.put(product.getProductNum(), productMap.getOrDefault(product.getProductNum(), 0) + product.getQuantity());
         }
-        this.clear();
-        for (Product product : products) {
-            product.setQuantity(productMap.get(product.getProductNum()));
-            this.add(product);
-        }
+        return super.add(pr);
     }
 
     /**
