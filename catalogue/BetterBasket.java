@@ -56,7 +56,7 @@ public class BetterBasket extends Basket implements Serializable {
     }
 
     /**
-     * Sorts the current basket from highest lowest product number.
+     * Sorts the current basket from highest to lowest product number.
      */
     public void sort() {
         this.sort(Comparator.comparing(Product::getProductNum));
