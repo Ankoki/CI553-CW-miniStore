@@ -96,8 +96,12 @@ public class BackDoorModel extends Observable {
             String aQuantity = quantity.trim();
             try {
                 amount = Integer.parseInt(aQuantity);   // Convert
-                if (amount < 0)
-                    throw new NumberFormatException("-ve");
+                if (amount <= 0) {
+                    theAction = "Must be greater than 0";
+                    setChanged();
+                    notifyObservers(theAction);
+                    return;
+                }
             } catch (Exception err) {
                 theAction = "Invalid quantity";
                 setChanged();

@@ -1,11 +1,15 @@
 package clients.packing;
 
 import catalogue.Basket;
+import clients.Theme;
+import clients.customer.CustomerView;
 import middle.MiddleFactory;
 import middle.OrderProcessing;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -21,10 +25,11 @@ public class PackingView implements Observer {
 
     private final JLabel pageTitle = new JLabel();
     private final JLabel theAction = new JLabel();
+    private final JLabel themeToggle = new JLabel();
     private final JTextArea theOutput = new JTextArea();
     private final JScrollPane theSP = new JScrollPane();
     private final JButton theBtPack = new JButton(PACKED);
-
+    private final Container cp;
     private OrderProcessing theOrder = null;
 
     private PackingController cont = null;
@@ -44,11 +49,22 @@ public class PackingView implements Observer {
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());
         }
-        Container cp = rpc.getContentPane();    // Content Pane
+        cp = rpc.getContentPane();    // Content Pane
         Container rootWindow = (Container) rpc;         // Root Window
         cp.setLayout(null);                             // No layout manager
         rootWindow.setSize(W, H);                     // Size of Window
         rootWindow.setLocation(x, y);
+
+        themeToggle.setBounds(16, 16, 10, 10);   // Picture area
+        themeToggle.setIcon(new ImageIcon("images/buttons/theme_toggle.png"));
+        themeToggle.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Theme.toggleTheme(PackingView.class);
+                PackingView.this.update0();
+            }
+        });
+        cp.add(themeToggle);                           //  Add to canvas
 
         Font f = new Font("Monospaced", Font.PLAIN, 12);  // Font f is
 
@@ -56,7 +72,9 @@ public class PackingView implements Observer {
         pageTitle.setText("Packing Bought Order");
         cp.add(pageTitle);
 
-        theBtPack.setBounds(16, 25, 80, 40);   // Check Button
+        theBtPack.setBounds(16, 50, 80, 35);   // Check Button
+        theBtPack.setBorder(null);
+        theBtPack.setOpaque(true);
         theBtPack.addActionListener(                   // Call back code
                 e -> cont.doPacked());
         cp.add(theBtPack);                          //  Add to canvas
@@ -68,8 +86,10 @@ public class PackingView implements Observer {
         theSP.setBounds(110, 55, 270, 205);           // Scrolling pane
         theOutput.setText("");                        //  Blank
         theOutput.setFont(f);                         //  Uses font
+        theOutput.setEditable(false);
         cp.add(theSP);                                //  Add to canvas
         theSP.getViewport().add(theOutput);           //  In TextArea
+        this.update0();
         rootWindow.setVisible(true);                  // Make visible
     }
 
@@ -85,6 +105,7 @@ public class PackingView implements Observer {
      */
     @Override
     public void update(Observable modelC, Object arg) {
+        update0();
         PackingModel model = (PackingModel) modelC;
         String message = (String) arg;
         theAction.setText(message);
@@ -95,6 +116,16 @@ public class PackingView implements Observer {
         } else {
             theOutput.setText("");
         }
+    }
+
+    private void update0 () {
+        cp.setBackground(Theme.getCurrentTheme(PackingView.class).getBackground());
+        pageTitle.setForeground(Theme.getCurrentTheme(PackingView.class).getText());
+        theBtPack.setForeground(Theme.getCurrentTheme(PackingView.class).getText());
+        theBtPack.setBackground(Theme.getCurrentTheme(PackingView.class).getHighlight());
+        theAction.setForeground(Theme.getCurrentTheme(PackingView.class).getText());
+        theOutput.setForeground(Theme.getCurrentTheme(PackingView.class).getText());
+        theOutput.setBackground(Theme.getCurrentTheme(PackingView.class).getHighlight());
     }
 
 }

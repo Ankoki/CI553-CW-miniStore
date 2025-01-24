@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
 
 public class BetterBasketTest {
 
@@ -19,41 +18,32 @@ public class BetterBasketTest {
         this.cabbage = new Product("V153", "Washed Cabbage", 1.0, 1);
         this.carrot = new Product("V158", "Juicy Carrot", 1.0, 1);
         this.onion = new Product("V141", "Tart Onion", 2.0, 1);
-        this.basket.addAll(List.of(cabbage, carrot, carrot, carrot, onion));
-        this.basket.add(new Product("V141", "Tart Onion", 2.0, 3));
     }
 
     @Test
-    public void testMerge() {
+    public void testAutoMerge() {
         this.initiate();
-        Assert.assertEquals(6, basket.size());
-        basket.mergeItems();
-        Assert.assertEquals(3, basket.size());
+        this.basket.add(cabbage);
+        this.basket.add(carrot);
+        this.basket.add(onion);
+        this.basket.add(onion);
+        this.basket.add(carrot);
+        Assert.assertEquals(3, this.basket.size());
         for (Product product : basket)
-            Assert.assertEquals(product.getProductNum().equals("V153") ? 1 :
-                    product.getProductNum().equals("V158") ? 3 : 4, product.getQuantity());
-    }
-
-    @Test
-    public void autoMerge() {
-        this.initiate();
-        Assert.assertEquals(6, basket.size());
-        basket.addMerge(this.cabbage);
-        Assert.assertEquals(3, basket.size());
-        for (Product product : basket)
-            Assert.assertEquals(product.getProductNum().equals("V153") ? 2 :
-                    product.getProductNum().equals("V158") ? 3 : 4, product.getQuantity());
+            Assert.assertEquals(product.getProductNum().equals("V153") ? 1 : 2, product.getQuantity());
     }
 
     @Test
     public void testSort() {
         this.initiate();
+        this.basket.add(cabbage);
+        this.basket.add(carrot);
+        this.basket.add(onion);
         Assert.assertEquals(basket.get(0).getProductNum(), cabbage.getProductNum());
         basket.sort();
         Assert.assertEquals(basket.get(0).getProductNum(), onion.getProductNum());
-        Assert.assertEquals(basket.get(2).getProductNum(), cabbage.getProductNum());
-        Assert.assertEquals(basket.get(3).getProductNum(), carrot.getProductNum());
+        Assert.assertEquals(basket.get(1).getProductNum(), cabbage.getProductNum());
+        Assert.assertEquals(basket.get(2).getProductNum(), carrot.getProductNum());
     }
-
 
 }
