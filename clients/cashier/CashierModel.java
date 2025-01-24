@@ -1,6 +1,7 @@
 package clients.cashier;
 
 import catalogue.Basket;
+import catalogue.BetterBasket;
 import catalogue.Product;
 import debug.DEBUG;
 import middle.*;
@@ -13,7 +14,7 @@ import java.util.Observable;
 public class CashierModel extends Observable {
     private State theState = State.process;   // Current state
     private Product theProduct = null;            // Current product
-    private Basket theBasket = null;            // Bought items
+    private BetterBasket theBasket = null;            // Bought items
     private String pn = "";                      // Product being processed
     private StockReadWriter theStock = null;
     private OrderProcessing theOrder = null;
@@ -39,7 +40,7 @@ public class CashierModel extends Observable {
      *
      * @return basket
      */
-    public Basket getBasket() {
+    public BetterBasket getBasket() {
         return theBasket;
     }
 
@@ -93,7 +94,7 @@ public class CashierModel extends Observable {
         try {
             if (theState != State.checked)          // Not checked
             {                                         //  with customer
-                theAction = "please check its availablity";
+                theAction = "Please check the products availability first.";
             } else {
                 boolean stockBought =                   // Buy
                         theStock.buyStock(                    //  however
@@ -175,8 +176,8 @@ public class CashierModel extends Observable {
      *
      * @return an instance of a new Basket
      */
-    protected Basket makeBasket() {
-        return new Basket();
+    protected BetterBasket makeBasket() {
+        return new BetterBasket();
     }
 
     private enum State {process, checked}
