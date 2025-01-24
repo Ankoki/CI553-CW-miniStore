@@ -1,6 +1,7 @@
 package clients.customer;
 
 import catalogue.Basket;
+import catalogue.BetterBasket;
 import catalogue.Product;
 import debug.DEBUG;
 import middle.MiddleFactory;
@@ -122,7 +123,8 @@ public class CustomerModel extends Observable {
      * @return an instance of a new Basket
      */
     protected Basket makeBasket() {
-        return new Basket();
+        return new BetterBasket();
     }
+
 }
 

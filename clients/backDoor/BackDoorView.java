@@ -82,11 +82,11 @@ public class BackDoorView implements Observer {
         cp.add(theAction);                            //  Add to canvas
 
         theInput.setBounds(110, 50, 120, 40);         // Input Area
-        theInput.setText("");                           // Blank
+        theInput.setText("Product Number");                           // Blank
         cp.add(theInput);                             //  Add to canvas
 
         theInputNo.setBounds(260, 50, 120, 40);       // Input Area
-        theInputNo.setText("0");                        // 0
+        theInputNo.setText("Quantity");                        // The Quantity
         cp.add(theInputNo);                           //  Add to canvas
 
         theSP.setBounds(110, 100, 270, 160);          // Scrolling pane

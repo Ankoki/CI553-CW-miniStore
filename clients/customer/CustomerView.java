@@ -69,7 +69,7 @@ public class CustomerView implements Observer {
         cp.add(theAction);                            //  Add to canvas
 
         theInput.setBounds(110, 50, 270, 40);         // Product no area
-        theInput.setText("");                           // Blank
+        theInput.setText("Product Number");                           // Input Requirement
         cp.add(theInput);                             //  Add to canvas
 
         theSP.setBounds(110, 100, 270, 160);          // Scrolling pane
