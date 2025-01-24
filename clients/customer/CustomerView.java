@@ -137,7 +137,7 @@ public class CustomerView implements Observer {
             thePicture.set(image);             // Display picture
         }
         theOutput.setText(model.getBasket().getDetails());
-        theInput.requestFocus();               // Focus is here
+        theInput.requestFocus();              // Focus is here
     }
 
     private void updateTheme() {
