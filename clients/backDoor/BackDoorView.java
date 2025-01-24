@@ -1,10 +1,13 @@
 package clients.backDoor;
 
+import clients.Theme;
 import middle.MiddleFactory;
 import middle.StockReadWriter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -22,6 +25,7 @@ public class BackDoorView implements Observer {
 
     private final JLabel pageTitle = new JLabel();
     private final JLabel theAction = new JLabel();
+    private final JLabel themeToggle = new JLabel();
     private final JTextField theInput = new JTextField();
     private final JTextField theInputNo = new JTextField();
     private final JTextArea theOutput = new JTextArea();
@@ -29,6 +33,7 @@ public class BackDoorView implements Observer {
     private final JButton theBtClear = new JButton(CLEAR);
     private final JButton theBtRStock = new JButton(RESTOCK);
     private final JButton theBtQuery = new JButton(QUERY);
+    private final Container cp;
 
     private StockReadWriter theStock = null;
     private BackDoorController cont = null;
@@ -48,11 +53,22 @@ public class BackDoorView implements Observer {
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());
         }
-        Container cp = rpc.getContentPane();    // Content Pane
+        cp = rpc.getContentPane();    // Content Pane
         Container rootWindow = (Container) rpc;         // Root Window
         cp.setLayout(null);                             // No layout manager
         rootWindow.setSize(W, H);                     // Size of Window
         rootWindow.setLocation(x, y);
+
+        themeToggle.setBounds(16, 16, 10, 10);   // Picture area
+        themeToggle.setIcon(new ImageIcon("images/buttons/theme_toggle.png"));
+        themeToggle.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Theme.toggleTheme(BackDoorView.class);
+                BackDoorView.this.update0();
+            }
+        });
+        cp.add(themeToggle);
 
         Font f = new Font("Monospaced", Font.PLAIN, 12);  // Font f is
 
@@ -60,18 +76,36 @@ public class BackDoorView implements Observer {
         pageTitle.setText("Staff check and manage stock");
         cp.add(pageTitle);
 
-        theBtQuery.setBounds(16, 25, 80, 40);    // Buy button
+        theBtQuery.setBounds(16, 50, 80, 35);    // Buy button
         theBtQuery.addActionListener(                   // Call back code
                 e -> cont.doQuery(theInput.getText()));
+        theBtQuery.setBorder(null);
+        theBtQuery.setOpaque(true);
         cp.add(theBtQuery);                           //  Add to canvas
 
-        theBtRStock.setBounds(16, 25 + 60, 80, 40);   // Check Button
+        theBtRStock.setBounds(16, 90, 80, 35);   // Check Button
+        theBtRStock.setBorder(null);
+        theBtRStock.setOpaque(true);
         theBtRStock.addActionListener(                  // Call back code
-                e -> cont.doRStock(theInput.getText(),
-                        theInputNo.getText()));
+                e -> {
+                    String input = theInputNo.getText();
+                    int quantity;
+                    try {
+                        quantity = Integer.parseInt(input);
+                    } catch (NumberFormatException ex) {
+                        theAction.setText("Invalid quantity. Must be greater than 0.");
+                        return;
+                    }
+                    if (quantity > 0)
+                        cont.doRStock(theInput.getText(), theInputNo.getText());
+                    else
+                        theAction.setText("Invalid quantity. Must be greater than 0.");
+                });
         cp.add(theBtRStock);                          //  Add to canvas
 
-        theBtClear.setBounds(16, 25 + 60 * 2, 80, 40);    // Buy button
+        theBtClear.setBounds(16, 220, 80, 35);    // Buy button
+        theBtClear.setBorder(null);
+        theBtClear.setOpaque(true);
         theBtClear.addActionListener(                   // Call back code
                 e -> cont.doClear());
         cp.add(theBtClear);                           //  Add to canvas
@@ -90,12 +124,16 @@ public class BackDoorView implements Observer {
         cp.add(theInputNo);                           //  Add to canvas
 
         theSP.setBounds(110, 100, 270, 160);          // Scrolling pane
+
         theOutput.setText("");                        //  Blank
         theOutput.setFont(f);                         //  Uses font
+        theOutput.setEditable(false);                 //  Make it so the user cannot change the output.
+
         cp.add(theSP);                                //  Add to canvas
         theSP.getViewport().add(theOutput);           //  In TextArea
         rootWindow.setVisible(true);                  // Make visible
-        theInput.requestFocus();                        // Focus is here
+        theInput.requestFocus();                      // Focus is here
+        this.update0();
     }
 
     public void setController(BackDoorController c) {
@@ -110,6 +148,7 @@ public class BackDoorView implements Observer {
      */
     @Override
     public void update(Observable modelC, Object arg) {
+        this.update0();
         BackDoorModel model = (BackDoorModel) modelC;
         String message = (String) arg;
         theAction.setText(message);
@@ -117,5 +156,24 @@ public class BackDoorView implements Observer {
         theOutput.setText(model.getBasket().getDetails());
         theInput.requestFocus();
     }
+
+    private void update0 () {
+        cp.setBackground(Theme.getCurrentTheme(BackDoorView.class).getBackground());
+        pageTitle.setForeground(Theme.getCurrentTheme(BackDoorView.class).getText());
+        theBtClear.setForeground(Theme.getCurrentTheme(BackDoorView.class).getText());
+        theBtClear.setBackground(Theme.getCurrentTheme(BackDoorView.class).getHighlight());
+        theBtRStock.setForeground(Theme.getCurrentTheme(BackDoorView.class).getText());
+        theBtRStock.setBackground(Theme.getCurrentTheme(BackDoorView.class).getHighlight());
+        theBtQuery.setForeground(Theme.getCurrentTheme(BackDoorView.class).getText());
+        theBtQuery.setBackground(Theme.getCurrentTheme(BackDoorView.class).getHighlight());
+        theAction.setForeground(Theme.getCurrentTheme(BackDoorView.class).getText());
+        theInput.setForeground(Theme.getCurrentTheme(BackDoorView.class).getText());
+        theInput.setBackground(Theme.getCurrentTheme(BackDoorView.class).getHighlight());
+        theInputNo.setForeground(Theme.getCurrentTheme(BackDoorView.class).getText());
+        theInputNo.setBackground(Theme.getCurrentTheme(BackDoorView.class).getHighlight());
+        theOutput.setForeground(Theme.getCurrentTheme(BackDoorView.class).getText());
+        theOutput.setBackground(Theme.getCurrentTheme(BackDoorView.class).getHighlight());
+    }
+
 
 }

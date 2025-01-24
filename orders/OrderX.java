@@ -29,13 +29,13 @@ import java.util.*;
 public class OrderX implements OrderProcessing {
     private static int theNextNumber = 1;          // Start at 1
     // Orders entered but waiting to be processed (picked)
-    private final ArrayList<Basket> theWaitingTray = new ArrayList<Basket>();
+    private final ArrayList<Basket> theWaitingTray = new ArrayList<>();
 
     // Orders being processed (currently being picked)
-    private final ArrayList<Basket> theBeingPickedTray = new ArrayList<Basket>();
+    private final ArrayList<Basket> theBeingPickedTray = new ArrayList<>();
 
     // Orders waiting to be collected by the customer
-    private final ArrayList<Basket> theToBeCollectedTray = new ArrayList<Basket>();
+    private final ArrayList<Basket> theToBeCollectedTray = new ArrayList<>();
 
     /**
      * Used to generate debug information
